@@ -21,12 +21,21 @@ if (jsonData !== null) {
   renderDSNV(DSNV);
 }
 
-//Xóa thông báo thẻ span
+// Reset các button về thuộc tính ban đầu
+$("#myModal").on("hidden.bs.modal", function () {
+  handleBtn("#btnThemNV", "inline-block");
+  handleBtn("#btnCapNhat", "inline-block");
+});
+
 getEle("#btnThem").onclick = function() {
-  var xoaThongBao = document.querySelectorAll(".sp-thongbao");
-    for (var i = 0; i < xoaThongBao.length; i++) {
-      xoaThongBao[i].textContent = "";
-    }
+  xoaThongBao(".sp-thongbao");
+  resetForm();
+  getEle("#tknv").readOnly = false;
+  handleBtn("#btnCapNhat", "none");
+}
+
+getEle("#btnDong").onclick = function() {
+  resetForm();
 }
 
 // Thêm nhân viên
@@ -61,6 +70,7 @@ getEle("#btnThemNV").onclick = function() {
       DSNV.push(nv);
       saveLocalStorage(DSNV);
       renderDSNV(DSNV);
+      $("#myModal").modal("hide");
       resetForm();
     }
     
@@ -86,10 +96,11 @@ function xoaNV(taiKhoan) {
 
   // Chỉnh sửa thông tin nhân viên
   function suaNV(taiKhoan) {
-    var xoaThongBao = document.querySelectorAll(".sp-thongbao");
-    for (var i = 0; i < xoaThongBao.length; i++) {
-      xoaThongBao[i].textContent = "";
-    }
+    // var xoaThongBao = document.querySelectorAll(".sp-thongbao");
+    // for (var i = 0; i < xoaThongBao.length; i++) {
+    //   xoaThongBao[i].textContent = "";
+    // }
+    xoaThongBao(".sp-thongbao");
     var viTri = DSNV.findIndex(function (item) {
       return item.taiKhoan === taiKhoan;
     });
@@ -104,6 +115,8 @@ function xoaNV(taiKhoan) {
     getEle("#luongCB").value = nv.luongCB;
     getEle("#chucvu").value = nv.chucVu;
     getEle("#gioLam").value = nv.gioLam;
+    $("#myModal").modal("show");
+    handleBtn("#btnThemNV", "none");
   }
 
 
@@ -143,6 +156,7 @@ function xoaNV(taiKhoan) {
     saveLocalStorage(DSNV);
     renderDSNV(DSNV);
     getEle("#tknv").readOnly = false;
+    $("#myModal").modal("hide");
     resetForm();
     }
   }
